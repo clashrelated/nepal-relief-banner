@@ -7,7 +7,7 @@ Minister's Disaster Relief Fund** on your site. It takes itself down on
 ```html
 <script
   src="https://cdn.jsdelivr.net/gh/clashrelated/nepal-relief-banner@1.0.1/banner.min.js"
-  integrity="sha384-ho2P9tyM1ZVoVX96zkFRkCYyJRGoXCjXpSS1a9KFnTyCUXAf1mVz3HAjQJSST1wN"
+  integrity="sha384-gq8At/HSInlVz0AFGXrL1DmG1gw5wiM30jBj+iCAItS3oJfg5milfF/KkCFv00wp"
   crossorigin="anonymous"
 ></script>
 ```
@@ -28,7 +28,11 @@ doesn't touch analytics unless you turn that on.
 | `data-position` | `top` | `top` sits in the flow, `sticky` holds at the top of the screen, `bottom` is fixed to the bottom. Use `top` or `bottom` if you already have a sticky header. |
 | `data-theme` | `light` | `light`, `dark`, `auto` |
 | `data-lang` | `auto` | `en`, `ne`, or `auto` from your `<html lang>` |
-| `data-accent` | brand blue | any CSS colour, for the link and icon |
+| `data-bg` | ``#eaf0ff`` | any CSS colour, for the background |
+| `data-icon` | `#1a4fdb` | any CSS colour, for the icon |
+| `data-link` | `#1a4fdb` | any CSS colour, for the link |
+| `data-underline` | `#1F5FF759` | any CSS colour, for the underline |
+| `data-rule` | `#1F5FF723` | any CSS colour, for the bottom border |
 | `data-dismissible` | `true` | `false` drops the close button |
 | `data-analytics` | `off` | `auto` forwards the click to `gtag` or `dataLayer` |
 | `data-until` | `2026-09-30` | last day it shows, Nepal time. A bare date runs to the end of that day. |

@@ -31,11 +31,38 @@
     return v === null || v === undefined || v === "" ? fallback : v;
   }
 
+  var THEMES = {
+    light: {
+      bg: "#eaf0ff",
+      fg: "#1e293b",
+      link: "#1a4fdb",
+      icon: "#1a4fdb",
+      rule: "rgba(31,95,247,0.14)",
+      underline: "rgba(31,95,247,0.35)",
+      close: "#64748b",
+      closeHover: "rgba(255,255,255,0.65)",
+    },
+    dark: {
+      bg: "#0d1b3e",
+      fg: "#dbe4f5",
+      link: "#9dbaff",
+      icon: "#9dbaff",
+      rule: "rgba(157,186,255,0.18)",
+      underline: "rgba(157,186,255,0.4)",
+      close: "#94a3b8",
+      closeHover: "rgba(255,255,255,0.09)",
+    },
+  };
+
   var config = {
     position: opt("position", "top"), // top | sticky | bottom
     lang: opt("lang", "auto"), // en | ne | auto
     theme: opt("theme", "light"), // light | dark | auto
-    accent: opt("accent", null),
+    bg: opt("bg", THEMES.light.bg),
+    link: opt("link", THEMES.light.link),
+    underline: opt("underline", THEMES.light.underline),
+    icon: opt("icon", THEMES.light.icon),
+    rule: opt("rule", THEMES.light.rule),
     dismissible: opt("dismissible", "true") !== "false",
     analytics: opt("analytics", "off") === "auto",
     until: opt("until", DEFAULT_UNTIL),
@@ -99,29 +126,6 @@
   }
   var copy = COPY[lang];
 
-  var THEMES = {
-    light: {
-      bg: "#eaf0ff",
-      fg: "#1e293b",
-      link: "#1a4fdb",
-      icon: "#1a4fdb",
-      rule: "rgba(31,95,247,0.14)",
-      underline: "rgba(31,95,247,0.35)",
-      close: "#64748b",
-      closeHover: "rgba(255,255,255,0.65)",
-    },
-    dark: {
-      bg: "#0d1b3e",
-      fg: "#dbe4f5",
-      link: "#9dbaff",
-      icon: "#9dbaff",
-      rule: "rgba(157,186,255,0.18)",
-      underline: "rgba(157,186,255,0.4)",
-      close: "#94a3b8",
-      closeHover: "rgba(255,255,255,0.09)",
-    },
-  };
-
   var themeName = config.theme;
   if (themeName === "auto") {
     themeName =
@@ -131,8 +135,13 @@
   }
   var t = THEMES[themeName] || THEMES.light;
   // ends up in a stylesheet, so no ; or }
-  if (config.accent && /^[#a-zA-Z0-9(),.%\s-]+$/.test(config.accent)) {
-    t = Object.assign({}, t, { link: config.accent, icon: config.accent });
+  t = {
+    ...t,
+    ...(config.bg && { bg: config.bg }),
+    ...(config.icon && { icon: config.icon }),
+    ...(config.link && { link: config.link }),
+    ...(config.underline && { underline: config.underline }),
+    ...(config.rule && { rule: config.rule }),
   }
 
   var css =
