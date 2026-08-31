@@ -1,0 +1,8 @@
+<!doctype html><html lang="ne"><head><meta charset="utf-8">
+<title>Nepali auto-detect</title>
+<script>window.CASE={name:'lang="ne" selects the Nepali copy',run:function(){
+  var t=strip().querySelector("a").textContent.trim();
+  return {pass: t.indexOf("प्रधानमन्त्री")===0, detail: t};
+}}</script>
+<script src="_harness.js"></script></head>
+<body><script src="../../banner.js"></script></body></html>

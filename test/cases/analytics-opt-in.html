@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>analytics opt-in</title>
+<script>window.dataLayer=[];window.__g=0;window.__ev=0;window.gtag=function(){window.__g++};
+document.addEventListener("nepal-relief-banner:donate",function(){window.__ev++});
+  // stop the synthetic click opening the donation page
+  document.addEventListener("click", function (e) {
+    // composedPath reaches the link inside the shadow root
+    var hitLink = e.composedPath().some(function (n) { return n.tagName === "A"; });
+    if (hitLink) e.preventDefault();
+  }, true);
+window.CASE={name:'data-analytics="auto" uses gtag once, not dataLayer',run:function(){
+  strip().querySelector("a").dispatchEvent(new MouseEvent("click",{bubbles:true,cancelable:true,composed:true}));
+  return {pass: window.__g===1 && window.dataLayer.length===0 && window.__ev===1,
+          detail:"gtag "+window.__g+", dataLayer "+window.dataLayer.length+", DOM event "+window.__ev+"; want 1, 0, 1"};
+}}</script>
+<script src="_harness.js"></script></head>
+<body><script src="../../banner.js" data-analytics="auto"></script></body></html>

@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Trusted Types</title>
+<meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'">
+<script>window.CASE={name:"mounts with require-trusted-types-for 'script'",run:function(){
+  return {pass: count()===1, detail: count()+" strip(s); want 1"};
+}}</script>
+<script src="_harness.js"></script></head>
+<body><script src="../../banner.js"></script></body></html>

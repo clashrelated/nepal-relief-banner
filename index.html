@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nepal Relief Banner</title>
+<meta name="description" content="One line of HTML links your site to the Government of Nepal Prime Minister's Disaster Relief Fund for the flood appeal, and takes itself down on 30 September 2026.">
+<style>
+  :root {
+    --canvas: #f8fafc;
+    --ink: #0f172a;
+    --muted: #52627a;
+    --line: #e4e9f2;
+    --link: #1a4fdb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 56px 24px 72px; }
+  h1 { font-size: 32px; line-height: 1.2; margin: 0 0 10px; letter-spacing: -0.02em; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 40px 0 10px; }
+  p { margin: 0 0 14px; color: var(--muted); }
+  p.lede { font-size: 18px; margin-bottom: 28px; }
+  a { color: var(--link); }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.87em;
+    background: var(--canvas);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+  .snippet { position: relative; }
+  pre {
+    background: #0d1b3e;
+    color: #cbd5e1;
+    border-radius: 10px;
+    padding: 16px 84px 16px 18px;
+    margin: 0 0 12px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    /* wrap the long URL so it clears the Copy button */
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+  .copy {
+    position: absolute; top: 10px; right: 10px;
+    font: inherit; font-size: 12px; font-weight: 500;
+    color: #cbd5e1; background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 6px;
+    padding: 4px 10px; cursor: pointer;
+  }
+  .copy:hover { background: rgba(255,255,255,.16); color: #fff; }
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    background: var(--canvas); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px 16px; margin-bottom: 14px;
+  }
+  .controls label { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 7px; }
+  .controls select { font: inherit; font-size: 13px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  td { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--muted); }
+  td:first-child { white-space: nowrap; color: var(--ink); }
+  footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+  @media (max-width: 560px) { h1 { font-size: 27px; } .wrap { padding: 40px 18px 56px; } }
+</style>
+</head>
+<body>
+
+<!-- the strip above is the real widget, not a mockup -->
+<script src="./banner.js"></script>
+
+<main class="wrap">
+  <h1>Nepal Relief Banner</h1>
+  <p class="lede">
+    One line of HTML puts that strip at the top of this page on your site,
+    linking to the Government of Nepal Prime Minister's Disaster Relief Fund.
+  </p>
+
+  <div class="snippet">
+    <pre><code id="snippet">&lt;script
+  src="https://cdn.jsdelivr.net/gh/clashrelated/nepal-relief-banner@1.0.1/banner.min.js"
+  integrity="sha384-ho2P9tyM1ZVoVX96zkFRkCYyJRGoXCjXpSS1a9KFnTyCUXAf1mVz3HAjQJSST1wN"
+  crossorigin="anonymous"
+&gt;&lt;/script&gt;</code></pre>
+    <button class="copy" type="button" id="copy">Copy</button>
+  </div>
+  <p>
+    Paste it after your opening <code>&lt;body&gt;</code> tag. 3.2&nbsp;KB gzipped, no requests of its own, no branding, and it takes itself down on
+    30 September.
+  </p>
+
+  <h2>Try it</h2>
+  <div class="controls">
+    <label>Position
+      <select id="c-position"><option>top</option><option>sticky</option><option>bottom</option></select>
+    </label>
+    <label>Theme
+      <select id="c-theme"><option>light</option><option>dark</option><option>auto</option></select>
+    </label>
+    <label>Language
+      <select id="c-lang"><option>auto</option><option>en</option><option>ne</option></select>
+    </label>
+  </div>
+  <table>
+    <tr><td><code>data-position</code></td><td><code>top</code> sits above your content and scrolls away with it. <code>sticky</code> does the same but then holds at the top of the screen. <code>bottom</code> is pinned to the bottom of the viewport. If your site already has a sticky header, use <code>top</code> or <code>bottom</code>, or the two will fight over the same strip of screen.</td></tr>
+    <tr><td><code>data-theme</code></td><td><code>light</code>, <code>dark</code>, or <code>auto</code>.</td></tr>
+    <tr><td><code>data-lang</code></td><td><code>en</code>, <code>ne</code>, or <code>auto</code>, which reads your <code>&lt;html lang&gt;</code>.</td></tr>
+    <tr><td><code>data-accent</code></td><td>Any CSS colour, for the link and icon.</td></tr>
+    <tr><td><code>data-dismissible</code></td><td><code>false</code> drops the close button.</td></tr>
+    <tr><td><code>data-analytics</code></td><td><code>auto</code> forwards the donate click into your <code>gtag</code> or <code>dataLayer</code>. Off by default.</td></tr>
+    <tr><td><code>data-until</code></td><td>The last day it shows, Nepal time. A bare date runs through the end of that day. Past it the script renders nothing.</td></tr>
+    <tr><td><code>data-target</code></td><td>A CSS selector to mount into instead of the page edge.</td></tr>
+  </table>
+
+  <footer>
+    WordPress, Shopify, Next.js, npm, a no-JavaScript version and the rest are
+    in the <a href="https://github.com/clashrelated/nepal-relief-banner">README</a>.
+    MIT.
+    <br><br>
+    The fund is at
+    <a href="https://pmdrf.nchl.com.np/" target="_blank" rel="noopener noreferrer">pmdrf.nchl.com.np</a>,
+    run by NCHL. This project isn't affiliated with them.
+  </footer>
+</main>
+
+<script>
+(function () {
+  var CDN = "https://cdn.jsdelivr.net/gh/clashrelated/nepal-relief-banner@1.0.1/banner.min.js";
+  var SRI = "sha384-ho2P9tyM1ZVoVX96zkFRkCYyJRGoXCjXpSS1a9KFnTyCUXAf1mVz3HAjQJSST1wN";
+  var snippet = document.getElementById("snippet");
+  var selects = {
+    position: document.getElementById("c-position"),
+    theme: document.getElementById("c-theme"),
+    lang: document.getElementById("c-lang")
+  };
+  var defaults = { position: "top", theme: "light", lang: "auto" };
+
+  function remount() {
+    var opts = {}, attrs = "", k;
+    for (k in selects) if (selects[k].value !== defaults[k]) opts[k] = selects[k].value;
+    for (k in opts) attrs += '\n  data-' + k + '="' + opts[k] + '"';
+    snippet.textContent = '<script\n  src="' + CDN + '"\n  integrity="' + SRI +
+      '"\n  crossorigin="anonymous"' + attrs + '\n><\/script>';
+
+    if (window.NepalReliefBanner) {
+      window.NepalReliefBanner.remove();
+      try { delete window.NepalReliefBanner; } catch (e) { window.NepalReliefBanner = undefined; }
+    }
+    // so the preview always comes back
+    try {
+      Object.keys(localStorage)
+        .filter(function (k) { return k.indexOf("nepal-relief-dismissed") === 0; })
+        .forEach(function (k) { localStorage.removeItem(k); });
+    } catch (e) {}
+    var s = document.createElement("script");
+    // cache-bust or the browser reuses the parsed copy
+    s.src = "./banner.js?v=" + Date.now();
+    for (k in opts) s.setAttribute("data-" + k, opts[k]);
+    document.body.appendChild(s);
+  }
+
+  for (var k in selects) selects[k].addEventListener("change", remount);
+
+  document.getElementById("copy").addEventListener("click", function () {
+    var btn = this;
+    navigator.clipboard.writeText(snippet.textContent).then(function () {
+      btn.textContent = "Copied";
+      setTimeout(function () { btn.textContent = "Copy"; }, 1600);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

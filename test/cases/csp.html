@@ -1,0 +1,9 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>strict CSP</title>
+<meta http-equiv="Content-Security-Policy" content="style-src 'self'">
+<script>window.CASE={name:"strict CSP keeps banner styles",run:function(){
+  var bg=getComputedStyle(strip()).backgroundColor;
+  return {pass: bg==="rgb(234, 240, 255)", detail:"strip background "+bg+"; want rgb(234, 240, 255)"};
+}}</script>
+<script src="_harness.js"></script></head>
+<body><script src="../../banner.js"></script></body></html>

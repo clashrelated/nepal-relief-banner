@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>two tags in head</title>
+<script src="../../banner.js?copy=1"></script>
+<script src="../../banner.js?copy=2"></script>
+<script>window.CASE={name:"two <head> scripts mount one strip",run:function(){
+  return {pass: count()===1, detail: count()+" strip(s); want 1"};
+}}</script>
+<script src="_harness.js"></script></head><body><h1>host</h1></body></html>

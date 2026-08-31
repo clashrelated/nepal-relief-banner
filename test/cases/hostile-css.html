@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>hostile host CSS</title>
+<style>a{color:red!important;font-size:40px!important}p{color:lime!important;margin:60px!important}
+div{border:3px solid orange!important}*{box-sizing:content-box!important}</style>
+<script>window.CASE={name:"host CSS cannot override banner styles",run:function(){
+  var mine=getComputedStyle(strip().querySelector("a")).color;
+  var theirs=getComputedStyle(document.querySelector("body > a")).color;
+  return {pass: mine==="rgb(26, 79, 219)" && theirs==="rgb(255, 0, 0)",
+          detail:"our link "+mine+" (want 26,79,219); their link "+theirs+" (want 255,0,0)"};
+}}</script>
+<script src="_harness.js"></script></head>
+<body><script src="../../banner.js"></script><p>host paragraph</p><a href="#">host link</a></body></html>

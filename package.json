@@ -1,0 +1,43 @@
+{
+  "name": "nepal-relief-banner",
+  "version": "1.0.1",
+  "description": "One line of HTML links any site to the Government of Nepal Prime Minister's Disaster Relief Fund for the flood appeal. Expires 30 September 2026.",
+  "main": "banner.js",
+  "unpkg": "banner.min.js",
+  "jsdelivr": "banner.min.js",
+  "files": [
+    "banner.js",
+    "banner.min.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "terser banner.js -c -m --comments \"/^!/\" -o banner.min.js",
+    "sri": "openssl dgst -sha384 -binary banner.min.js | openssl base64 -A | sed 's/^/sha384-/'",
+    "test": "node --test test/node.test.mjs"
+  },
+  "devDependencies": {
+    "terser": "5.31.0"
+  },
+  "keywords": [
+    "nepal",
+    "relief",
+    "donation",
+    "disaster",
+    "banner",
+    "widget",
+    "announcement-bar",
+    "pmdrf"
+  ],
+  "author": "clashrelated",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clashrelated/nepal-relief-banner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/clashrelated/nepal-relief-banner/issues"
+  },
+  "homepage": "https://github.com/clashrelated/nepal-relief-banner#readme",
+  "sideEffects": true
+}

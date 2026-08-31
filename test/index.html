@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nepal-relief-banner tests</title>
+<style>
+  body { font: 15px/1.6 ui-sans-serif, system-ui, sans-serif; max-width: 860px; margin: 0 auto; padding: 40px 24px; color: #0f172a; }
+  h1 { font-size: 24px; margin: 0 0 6px; }
+  p { color: #52627a; margin: 0 0 20px; }
+  #summary { font-weight: 600; padding: 10px 14px; border-radius: 8px; margin-bottom: 18px; background: #f1f5f9; }
+  .row { display: flex; flex-wrap: wrap; gap: 4px 12px; padding: 9px 12px; border-bottom: 1px solid #e4e9f2; align-items: baseline; }
+  .tag { font: 12px ui-monospace, monospace; font-weight: 700; padding: 2px 7px; border-radius: 4px; flex: none; }
+  .p { background: #e7f8ed; color: #0f6b34; }
+  .f { background: #fdeaea; color: #a01919; }
+  .w { background: #fef6e0; color: #8a6100; }
+  .name { flex: 1 1 auto; min-width: 0; }
+  .detail { font: 12px ui-monospace, monospace; color: #52627a; flex: 0 0 100%; margin: 0 0 0 62px; overflow-wrap: anywhere; }
+  iframe { width: 0; height: 0; border: 0; position: absolute; visibility: hidden; }
+</style>
+</head>
+<body>
+<h1>nepal-relief-banner tests</h1>
+<p>
+  Each case loads <code>banner.js</code> in its own iframe, to exercise CSP,
+  Trusted Types and shadow DOM. Run <code>python3 -m http.server 4173</code> and
+  open <code>localhost:4173/test/</code>; <code>file://</code> will not work.
+</p>
+<div id="summary">Running…</div>
+<div id="results"></div>
+<script>
+(function () {
+  var CASES = [
+    "csp", "trusted-types", "hostile-css", "double-mount", "bad-target",
+    "expiry", "analytics-default-off", "analytics-opt-in", "lang-nepali"
+  ];
+  var seen = {}, pass = 0, fail = 0;
+  var results = document.getElementById("results");
+  var summary = document.getElementById("summary");
+
+  function draw(name, ok, detail) {
+    var row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML =
+      '<span class="tag ' + (ok ? "p" : "f") + '">' + (ok ? "PASS" : "FAIL") + "</span>" +
+      '<span class="name"></span><span class="detail"></span>';
+    row.querySelector(".name").textContent = name;
+    row.querySelector(".detail").textContent = detail;
+    results.appendChild(row);
+  }
+
+  function tally() {
+    var done = pass + fail;
+    summary.textContent = pass + " passed, " + fail + " failed, " + done + "/" + CASES.length + " reported";
+    summary.style.background = fail ? "#fdeaea" : done === CASES.length ? "#e7f8ed" : "#f1f5f9";
+  }
+
+  window.addEventListener("message", function (e) {
+    var d = e.data;
+    if (!d || !d.nrb || seen[d.name]) return;
+    seen[d.name] = true;
+    d.pass ? pass++ : fail++;
+    draw(d.name, d.pass, d.detail);
+    tally();
+  });
+
+  CASES.forEach(function (c) {
+    var f = document.createElement("iframe");
+    f.src = "cases/" + c + ".html";
+    document.body.appendChild(f);
+  });
+
+  // flag cases that never report
+  setTimeout(function () {
+    if (pass + fail === CASES.length) return;
+    var row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = '<span class="tag w">?</span><span class="name"></span>';
+    row.querySelector(".name").textContent =
+      (CASES.length - pass - fail) + " case(s) never reported. Are you serving over HTTP?";
+    results.appendChild(row);
+  }, 4000);
+})();
+</script>
+</body>
+</html>
