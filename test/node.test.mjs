@@ -7,9 +7,95 @@ import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import vm from "node:vm";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (f) => readFileSync(join(root, f), "utf8");
+
+class TestElement {
+  constructor(tagName) {
+    this.tagName = tagName;
+    this.attributes = {};
+    this.children = [];
+    this.parentNode = null;
+    this.shadowRoot = null;
+    this.textContent = "";
+  }
+  setAttribute(name, value) {
+    this.attributes[name] = String(value);
+  }
+  getAttribute(name) {
+    return Object.hasOwn(this.attributes, name) ? this.attributes[name] : null;
+  }
+  appendChild(child) {
+    child.parentNode = this;
+    this.children.push(child);
+    return child;
+  }
+  insertBefore(child) {
+    child.parentNode = this;
+    this.children.unshift(child);
+    return child;
+  }
+  addEventListener() {}
+  attachShadow() {
+    this.shadowRoot = new TestElement("#shadow-root");
+    return this.shadowRoot;
+  }
+}
+
+function findElement(node, predicate) {
+  if (predicate(node)) return node;
+  for (const child of node.children) {
+    var found = findElement(child, predicate);
+    if (found) return found;
+  }
+  if (node.shadowRoot) return findElement(node.shadowRoot, predicate);
+  return null;
+}
+
+function emittedCss(attrs = {}, { dark = false } = {}) {
+  const script = new TestElement("script");
+  for (const [name, value] of Object.entries(attrs)) script.setAttribute("data-" + name, value);
+
+  const body = new TestElement("body");
+  const document = {
+    currentScript: script,
+    body,
+    documentElement: new TestElement("html"),
+    createElement: (tag) => new TestElement(tag),
+    createElementNS: (ns, tag) => new TestElement(tag),
+    querySelector: () => null,
+    addEventListener() {},
+    dispatchEvent() {},
+  };
+  const window = {
+    __nepalReliefBannerClaimed: false,
+    localStorage: { getItem: () => null, setItem() {} },
+    matchMedia: (query) => ({
+      matches: query.indexOf("prefers-color-scheme") !== -1 && dark,
+    }),
+  };
+
+  vm.runInNewContext(read("banner.js"), {
+    window,
+    document,
+    Date,
+    CustomEvent: function CustomEvent(type, init) {
+      return { type, detail: init && init.detail };
+    },
+  });
+
+  const host = findElement(body, (node) => node.tagName === "nepal-relief-banner");
+  assert.ok(host, "banner host not mounted");
+  const style = findElement(host.shadowRoot, (node) => node.tagName === "style");
+  assert.ok(style, "fallback style element not emitted");
+  return style.textContent;
+}
+
+function cssValue(css, pattern) {
+  return css.match(pattern)?.[1];
+}
 
 test("banner.js loads without browser globals", async () => {
   const src = read("banner.js");
@@ -51,4 +137,22 @@ test("donation URL stays fixed to the government portal", () => {
   const src = read("banner.js");
   assert.match(src, /FUND_URL\s*=\s*"https:\/\/pmdrf\.nchl\.com\.np\/"/);
   assert.ok(!/opt\("(url|href|fund)"/.test(src), "donation URL became configurable");
+});
+
+test("dark and auto-dark keep dark theme colors without color overrides", () => {
+  for (const css of [emittedCss({ theme: "dark" }), emittedCss({ theme: "auto" }, { dark: true })]) {
+    assert.equal(cssValue(css, /background:([^;]+);color:/), "#0d1b3e");
+    assert.equal(cssValue(css, /;color:([^;]+);border-bottom:/), "#dbe4f5");
+    assert.equal(cssValue(css, /a\{color:([^;]+);font-weight/), "#9dbaff");
+  }
+});
+
+test("hostile color option values do not reach emitted CSS", () => {
+  const hostile = "red;} .owned{background:url(https://attacker.example/x)";
+  const css = emittedCss({ bg: hostile });
+
+  assert.equal(cssValue(css, /background:([^;]+);color:/), "#eaf0ff");
+  assert.ok(!css.includes("attacker.example"));
+  assert.ok(!css.includes(".owned"));
+  assert.ok(!css.includes(hostile));
 });

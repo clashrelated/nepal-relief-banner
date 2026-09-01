@@ -1,6 +1,6 @@
 {
   "name": "nepal-relief-banner",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "One line of HTML links any site to the Government of Nepal Prime Minister's Disaster Relief Fund for the flood appeal. Expires 30 September 2026.",
   "main": "banner.js",
   "unpkg": "banner.min.js",
@@ -12,7 +12,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "terser banner.js -c -m --comments \"/^!/\" -o banner.min.js",
+    "build": "terser banner.js --ecma 5 -c -m --comments \"/^!/\" -o banner.min.js",
     "sri": "openssl dgst -sha384 -binary banner.min.js | openssl base64 -A | sed 's/^/sha384-/'",
     "test": "node --test test/node.test.mjs"
   },

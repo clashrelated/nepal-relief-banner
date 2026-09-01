@@ -1,4 +1,4 @@
-/*! nepal-relief-banner v1.0.1 | MIT
+/*! nepal-relief-banner v1.0.2 | MIT
  *  https://github.com/clashrelated/nepal-relief-banner
  */
 (function () {
@@ -7,7 +7,7 @@
   // SSR: bundlers will happily run this on a server
   if (typeof window === "undefined" || typeof document === "undefined") return;
 
-  var VERSION = "1.0.1";
+  var VERSION = "1.0.2";
 
   // deliberately not configurable
   var FUND_URL = "https://pmdrf.nchl.com.np/";
@@ -54,15 +54,30 @@
     },
   };
 
+  // colours end up in a stylesheet, so nothing that could close a rule or fetch a URL
+  function cssColor(name) {
+    var v = opt(name, null);
+    if (!v) return null;
+    v = v.trim();
+    if (!v || /[;{}]/.test(v) || /url\s*\(/i.test(v)) return null;
+    if (window.CSS && typeof window.CSS.supports === "function") {
+      return window.CSS.supports("color", v) ? v : null;
+    }
+    return /^(#[0-9a-f]{3,8}|[a-z]+|rgba?\([\d\s,%.]+\)|hsla?\([\d\s,%.]+\))$/i.test(v)
+      ? v
+      : null;
+  }
+
   var config = {
     position: opt("position", "top"), // top | sticky | bottom
     lang: opt("lang", "auto"), // en | ne | auto
     theme: opt("theme", "light"), // light | dark | auto
-    bg: opt("bg", THEMES.light.bg),
-    link: opt("link", THEMES.light.link),
-    underline: opt("underline", THEMES.light.underline),
-    icon: opt("icon", THEMES.light.icon),
-    rule: opt("rule", THEMES.light.rule),
+    accent: cssColor("accent"),
+    bg: cssColor("bg"),
+    link: cssColor("link"),
+    underline: cssColor("underline"),
+    icon: cssColor("icon"),
+    rule: cssColor("rule"),
     dismissible: opt("dismissible", "true") !== "false",
     analytics: opt("analytics", "off") === "auto",
     until: opt("until", DEFAULT_UNTIL),
@@ -133,16 +148,16 @@
         ? "dark"
         : "light";
   }
-  var t = THEMES[themeName] || THEMES.light;
-  // ends up in a stylesheet, so no ; or }
-  t = {
-    ...t,
-    ...(config.bg && { bg: config.bg }),
-    ...(config.icon && { icon: config.icon }),
-    ...(config.link && { link: config.link }),
-    ...(config.underline && { underline: config.underline }),
-    ...(config.rule && { rule: config.rule }),
+  var t = Object.assign({}, THEMES[themeName] || THEMES.light);
+  if (config.accent) {
+    t.link = config.accent;
+    t.icon = config.accent;
   }
+  if (config.bg) t.bg = config.bg;
+  if (config.icon) t.icon = config.icon;
+  if (config.link) t.link = config.link;
+  if (config.underline) t.underline = config.underline;
+  if (config.rule) t.rule = config.rule;
 
   var css =
     ":host{all:initial;display:block;contain:layout style}" +
