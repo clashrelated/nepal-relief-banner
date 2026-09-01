@@ -1,4 +1,4 @@
-/*! nepal-relief-banner v1.0.1 | MIT
+/*! nepal-relief-banner v1.0.2 | MIT
  *  https://github.com/clashrelated/nepal-relief-banner
  */
 (function () {
@@ -7,7 +7,7 @@
   // SSR: bundlers will happily run this on a server
   if (typeof window === "undefined" || typeof document === "undefined") return;
 
-  var VERSION = "1.0.1";
+  var VERSION = "1.0.2";
 
   // deliberately not configurable
   var FUND_URL = "https://pmdrf.nchl.com.np/";
@@ -31,11 +31,53 @@
     return v === null || v === undefined || v === "" ? fallback : v;
   }
 
+  var THEMES = {
+    light: {
+      bg: "#eaf0ff",
+      fg: "#1e293b",
+      link: "#1a4fdb",
+      icon: "#1a4fdb",
+      rule: "rgba(31,95,247,0.14)",
+      underline: "rgba(31,95,247,0.35)",
+      close: "#64748b",
+      closeHover: "rgba(255,255,255,0.65)",
+    },
+    dark: {
+      bg: "#0d1b3e",
+      fg: "#dbe4f5",
+      link: "#9dbaff",
+      icon: "#9dbaff",
+      rule: "rgba(157,186,255,0.18)",
+      underline: "rgba(157,186,255,0.4)",
+      close: "#94a3b8",
+      closeHover: "rgba(255,255,255,0.09)",
+    },
+  };
+
+  // colours end up in a stylesheet, so nothing that could close a rule or fetch a URL
+  function cssColor(name) {
+    var v = opt(name, null);
+    if (!v) return null;
+    v = v.trim();
+    if (!v || /[;{}]/.test(v) || /url\s*\(/i.test(v)) return null;
+    if (window.CSS && typeof window.CSS.supports === "function") {
+      return window.CSS.supports("color", v) ? v : null;
+    }
+    return /^(#[0-9a-f]{3,8}|[a-z]+|rgba?\([\d\s,%.]+\)|hsla?\([\d\s,%.]+\))$/i.test(v)
+      ? v
+      : null;
+  }
+
   var config = {
     position: opt("position", "top"), // top | sticky | bottom
     lang: opt("lang", "auto"), // en | ne | auto
     theme: opt("theme", "light"), // light | dark | auto
-    accent: opt("accent", null),
+    accent: cssColor("accent"),
+    bg: cssColor("bg"),
+    link: cssColor("link"),
+    underline: cssColor("underline"),
+    icon: cssColor("icon"),
+    rule: cssColor("rule"),
     dismissible: opt("dismissible", "true") !== "false",
     analytics: opt("analytics", "off") === "auto",
     until: opt("until", DEFAULT_UNTIL),
@@ -99,29 +141,6 @@
   }
   var copy = COPY[lang];
 
-  var THEMES = {
-    light: {
-      bg: "#eaf0ff",
-      fg: "#1e293b",
-      link: "#1a4fdb",
-      icon: "#1a4fdb",
-      rule: "rgba(31,95,247,0.14)",
-      underline: "rgba(31,95,247,0.35)",
-      close: "#64748b",
-      closeHover: "rgba(255,255,255,0.65)",
-    },
-    dark: {
-      bg: "#0d1b3e",
-      fg: "#dbe4f5",
-      link: "#9dbaff",
-      icon: "#9dbaff",
-      rule: "rgba(157,186,255,0.18)",
-      underline: "rgba(157,186,255,0.4)",
-      close: "#94a3b8",
-      closeHover: "rgba(255,255,255,0.09)",
-    },
-  };
-
   var themeName = config.theme;
   if (themeName === "auto") {
     themeName =
@@ -129,11 +148,16 @@
         ? "dark"
         : "light";
   }
-  var t = THEMES[themeName] || THEMES.light;
-  // ends up in a stylesheet, so no ; or }
-  if (config.accent && /^[#a-zA-Z0-9(),.%\s-]+$/.test(config.accent)) {
-    t = Object.assign({}, t, { link: config.accent, icon: config.accent });
+  var t = Object.assign({}, THEMES[themeName] || THEMES.light);
+  if (config.accent) {
+    t.link = config.accent;
+    t.icon = config.accent;
   }
+  if (config.bg) t.bg = config.bg;
+  if (config.icon) t.icon = config.icon;
+  if (config.link) t.link = config.link;
+  if (config.underline) t.underline = config.underline;
+  if (config.rule) t.rule = config.rule;
 
   var css =
     ":host{all:initial;display:block;contain:layout style}" +

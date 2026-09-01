@@ -6,8 +6,8 @@ Minister's Disaster Relief Fund** on your site. It takes itself down on
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/clashrelated/nepal-relief-banner@1.0.1/banner.min.js"
-  integrity="sha384-ho2P9tyM1ZVoVX96zkFRkCYyJRGoXCjXpSS1a9KFnTyCUXAf1mVz3HAjQJSST1wN"
+  src="https://cdn.jsdelivr.net/gh/clashrelated/nepal-relief-banner@1.0.2/banner.min.js"
+  integrity="sha384-zsV61Tmn6kfxMnauiuGMOgbTqBC6qhHBy/x0ne2M0sSSoK3q+xTlPs3ZMC8W/SUp"
   crossorigin="anonymous"
 ></script>
 ```
@@ -28,7 +28,12 @@ doesn't touch analytics unless you turn that on.
 | `data-position` | `top` | `top` sits in the flow, `sticky` holds at the top of the screen, `bottom` is fixed to the bottom. Use `top` or `bottom` if you already have a sticky header. |
 | `data-theme` | `light` | `light`, `dark`, `auto` |
 | `data-lang` | `auto` | `en`, `ne`, or `auto` from your `<html lang>` |
-| `data-accent` | brand blue | any CSS colour, for the link and icon |
+| `data-accent` | brand blue | compatibility alias for `data-link` and `data-icon` |
+| `data-bg` | `#eaf0ff` | any CSS colour, for the background |
+| `data-icon` | `#1a4fdb` | any CSS colour, for the icon |
+| `data-link` | `#1a4fdb` | any CSS colour, for the link |
+| `data-underline` | `#1F5FF759` | any CSS colour, for the underline |
+| `data-rule` | `#1F5FF723` | any CSS colour, for the bottom border |
 | `data-dismissible` | `true` | `false` drops the close button |
 | `data-analytics` | `off` | `auto` forwards the click to `gtag` or `dataLayer` |
 | `data-until` | `2026-09-30` | last day it shows, Nepal time. A bare date runs to the end of that day. |
@@ -36,8 +41,8 @@ doesn't touch analytics unless you turn that on.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/clashrelated/nepal-relief-banner@1.0.1/banner.min.js"
-  integrity="sha384-ho2P9tyM1ZVoVX96zkFRkCYyJRGoXCjXpSS1a9KFnTyCUXAf1mVz3HAjQJSST1wN"
+  src="https://cdn.jsdelivr.net/gh/clashrelated/nepal-relief-banner@1.0.2/banner.min.js"
+  integrity="sha384-zsV61Tmn6kfxMnauiuGMOgbTqBC6qhHBy/x0ne2M0sSSoK3q+xTlPs3ZMC8W/SUp"
   crossorigin="anonymous"
   data-position="bottom"
   data-theme="auto"
@@ -100,7 +105,7 @@ and use `@1`:
 can check the hash yourself:
 
 ```sh
-curl -s https://cdn.jsdelivr.net/gh/clashrelated/nepal-relief-banner@1.0.1/banner.min.js | openssl dgst -sha384 -binary | openssl base64 -A
+curl -s https://cdn.jsdelivr.net/gh/clashrelated/nepal-relief-banner@1.0.2/banner.min.js | openssl dgst -sha384 -binary | openssl base64 -A
 ```
 
 The donate URL is hardcoded on purpose.
@@ -115,9 +120,10 @@ npm test                      # node
 python3 -m http.server 4173   # then localhost:4173/test/
 ```
 
-Node covers the SSR guard, the expiry parsing and the SRI hash. The browser
-cases cover CSP, Trusted Types, shadow-DOM isolation, double-mounting, a bad
-`data-target`, expiry, analytics, and the Nepali copy.
+Node covers the SSR guard, the expiry parsing, the SRI hash, dark themes, and
+colour option sanitisation. The browser cases cover CSP, Trusted Types,
+shadow-DOM isolation, double-mounting, a bad `data-target`, expiry, analytics,
+and the Nepali copy.
 
 ## Licence
 
